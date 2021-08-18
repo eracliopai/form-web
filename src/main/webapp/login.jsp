@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +8,8 @@
 <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
-
-<body>
 	<fieldset>
-		<form action="loginservlet" method="post" >
+		<form action="loginservlet" method="post">
 			<legend>ACESSAR</legend>
 			<img id="img-java" src="img/java.png" alt="imagem java"> <label
 				for="login">Login:</label> 
@@ -21,6 +19,5 @@
 			<input type="submit" class="bt" value="Acessar">
 		</form>
 	</fieldset>
-</body>
 </body>
 </html>
