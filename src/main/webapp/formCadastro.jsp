@@ -68,8 +68,11 @@
 				<option value="Fundamental">Fundamental</option>
 				<option value="Ensino Médio">Ensino Médio</option>
 				<option value="Superio">Superior</option>
-			</select> <input type="submit" class="bt" value="Enviar"> <input
-				type="reset" class="bt" value="Limpar">
+			</select> 
+			    <input type="submit" class="bt" value="Enviar"> 
+			    <input type="reset" class="bt" value="Limpar">
+				<input type="submit" class="bt" value="Deletar">
+				<input type="submit" class="bt" value="Alterar">
 		</fieldset>
 	</form>
 	<script type="text/javascript">
