@@ -17,6 +17,7 @@
 </head>
 
 <body>
+	<%@ include file="menu.jsp"%>
 	<%
 	Pessoa p = new Pessoa();
 	try {
@@ -24,15 +25,13 @@
 		PessoaDao dao = new PessoaDao();
 		p = dao.getPessoa(id);
 	} catch (Exception e) {
-		
 	}
-	
 	//out.print(id);
 	%>
 
 
 	<form action="cadastroServlet">
-	<input type="hidden" name="id" value="<%=p.getId()%>">
+		<input type="hidden" name="id" value="<%=p.getId()%>">
 		<fieldset>
 			<legend>CADASTRO</legend>
 			<img id="img-java" src="img/java.png" alt="imagem java"> <label
@@ -46,8 +45,10 @@
 				class="larguraTexto" type="date" id="dtNascimento"
 				name="dt-nascimento" value="<%=p.getDtNascimento()%>"> <label
 				for="email">E-mail:</label> <input class="larguraTexto" type="email"
-				id="email" name="email" value="<%=p.getEmail()%>"> <label
-				for="sexo">Sexo:</label>
+				id="email" name="email" value="<%=p.getEmail()%>"> <label>Estado</label>
+			<select id="estado" name="estado">
+				<option>Selecione</option>
+			</select> <label for="sexo">Sexo:</label>
 			<div class="bloco-inline">
 				<input type="radio" id="masc" name="sexo" value="m"> <label
 					for="masc"> Masculino</label> <input type="radio" id="fem"
@@ -59,7 +60,7 @@
 				<label for="html"> HTML</label> <input type="checkbox" id="css"
 					name="tecnologia" value="css"><label for="css"> CSS</label>
 				<input type="checkbox" id="java" name="tecnologia" value="java"><label
-					for="java"> JAVA</label> <input type="checkbox" id="php"
+					for="java"> Java</label> <input type="checkbox" id="php"
 					name="tecnologia" value="php"><label for="php"> PHP</label>
 			</div>
 			<label for="">Escolaridade:</label> <select name="escolaridade"
@@ -67,12 +68,22 @@
 				<option value="">Selecione</option>
 				<option value="Fundamental">Fundamental</option>
 				<option value="Ensino Médio">Ensino Médio</option>
-				<option value="Superio">Superior</option>
-			</select> 
-			    <input type="submit" class="bt" value="Enviar"> 
-			    <input type="reset" class="bt" value="Limpar">
-				<input type="submit" class="bt" value="Deletar">
-				<input type="submit" class="bt" value="Alterar">
+				<option value="Superio">Superio</option>
+			</select> <a class="bt" href="formCadastro.jsp">Novo Cadastro</a>
+			<%
+			if (p.getId() > 0) {
+			%>
+			<a class="bt"
+				onclick="return confirm('Você realmente quer apagar esse registro?');"
+				href="cadastroServlet?id=<%=p.getId()%>&acao=apagar">Apagar</a>
+			<%
+			} else {
+			%>
+			<input type="reset" class="bt" value="Limpar">
+			<%
+			}
+			%>
+			<input type="submit" class="bt" value="Gravar">
 		</fieldset>
 	</form>
 	<script type="text/javascript">
@@ -82,15 +93,49 @@
 				lsSexo[i].setAttribute('checked', 'checked');
 			}
 		}
+		document.getElementById("escolaridade").value = '<%=p.getEscolaridade()%>';
+	<%for (String t : p.getTecnologia()) {
+	if (!t.equals("")) {
+		out.println("document.getElementById('" + t + "').setAttribute('checked', 'checked')");
+	}
+}%>
+		function acessarApi() {
+			const api = new XMLHttpRequest();
+			
+			api.open("GET","https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+			api.send();
+			api.onload = function() {
+				var dados = this.responseText;
+				dados = JSON.parse(dados);
+				var lsEstados = "<option value=''>Selecione</option>";
+				for(i in dados){
+					//document.write(dados[i].sigla)
+					var uf = dados[i].sigla;
+					var nome = dados[i].nome;
+					lsEstados += "<option value='"+uf+"'>"+nome+"</option>";
+				}
+				var estado = document.getElementById("estado");
+				estado.innerHTML = lsEstados;
+			}
+			
+			
+			
+			
+		}
 		
-		document.getElementById("escolaridade").value = "<%=p.getEscolaridade()%>";
-	<%
-	for (String t : p.getTecnologia()) {
-	out.println("document.getElementById('" + t + "').setAttribute('checked', 'checked')");
-}
-%>
-		
+		acessarApi();
 	</script>
+
+	<%
+	if (verLista) {
+	%>
+	<div id="tb">
+		<%@ include file="listaPessoas.jsp"%>
+	</div>
+	<%
+	}
+	%>
+
 </body>
 
 </html>
